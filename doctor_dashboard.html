@@ -1,0 +1,208 @@
+
+<style>
+
+/* Background */
+body {
+    background: linear-gradient(135deg, #1f4037, #99f2c8);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Main Container */
+.dashboard-container {
+    width: 90%;
+    margin: auto;
+    padding: 30px 0;
+}
+
+/* Header */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.dashboard-header h2 {
+    font-size: 28px;
+}
+
+/* Logout Button */
+.logout-btn {
+    background: #ff4b5c;
+    padding: 8px 16px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: #e63e4d;
+}
+
+/* Grid Layout */
+.appointments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* Appointment Card */
+.appointment-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    padding: 20px;
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.appointment-card:hover {
+    transform: translateY(-8px);
+}
+
+/* Card Header */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Status Badge */
+.status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.pending {
+    background: #ffc107;
+    color: black;
+}
+
+.accepted {
+    background: #28a745;
+}
+
+.rejected {
+    background: #dc3545;
+}
+
+/* Action Buttons */
+.action-buttons {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 6px 14px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.accept-btn {
+    background: #28a745;
+    color: white;
+}
+
+.accept-btn:hover {
+    background: #218838;
+}
+
+.reject-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.reject-btn:hover {
+    background: #c82333;
+}
+
+/* No Data */
+.no-data {
+    text-align: center;
+    font-size: 18px;
+    color: white;
+    margin-top: 50px;
+}
+
+</style>
+
+<div class="dashboard-container">
+
+    <div class="dashboard-header">
+        <h2>👨‍⚕️ Doctor Dashboard</h2>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+
+    {% if appointments %}
+        <div class="appointments-grid">
+            {% for appt in appointments %}
+            <div class="appointment-card">
+
+                <div class="card-header">
+                    <h3>{{ appt.name }}</h3>
+                    <span class="status 
+                        {% if appt.status == 'Pending' %}pending
+                        {% elif appt.status == 'Accepted' %}accepted
+                        {% elif appt.status == 'Rejected' %}rejected
+                        {% endif %}">
+                        {{ appt.status }}
+                    </span>
+                </div>
+
+                <p><strong>Appointment Date:</strong> {{ appt.date }}</p>
+
+               {% if appt.status == 'Pending' %}
+<div class="action-buttons">
+    <a href="/update/{{ appt.id }}/Accepted"
+       class="btn action-btn accept-btn"
+       onclick="return confirmAction('accept')">
+        ✔ Accept
+    </a>
+
+    <a href="/update/{{ appt.id }}/Rejected"
+       class="btn action-btn reject-btn"
+       onclick="return confirmAction('reject')">
+        ✖ Reject
+    </a>
+</div>
+{% endif %}
+
+{% if appt.status == 'Accepted' %}
+<div class="action-buttons">
+    {% if appt.prescription %}
+        <a href="/add_prescription/{{ appt.id }}" class="btn accept-btn">
+            ✏ Edit Prescription
+        </a>
+    {% else %}
+        <a href="/add_prescription/{{ appt.id }}" class="btn accept-btn">
+            📝 Add Prescription
+        </a>
+    {% endif %}
+</div>
+{% endif %}            
+</div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-data">No Appointments Available</p>
+    {% endif %}
+
+</div>
+<script>
+function confirmAction(type) {
+    if (type === 'accept') {
+        return confirm("Are you sure you want to ACCEPT this appointment?");
+    } else {
+        return confirm("Are you sure you want to REJECT this appointment?");
+    }
+}
+</script>

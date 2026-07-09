@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prescription</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .info {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .prescription-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fc;
+            border-radius: 10px;
+            border-left: 5px solid #4e73df;
+            font-size: 15px;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: right;
+            font-style: italic;
+            color: #555;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 18px;
+            background-color: #4e73df;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: #2e59d9;
+        }
+
+        .btn-print {
+            float: right;
+            padding: 8px 15px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-print:hover {
+            background: #218838;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .btn-back,
+            .btn-print {
+                display: none;
+            }
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <button class="btn-print" onclick="window.print()">Print</button>
+
+        <div class="header">
+            <h2>🏥 Medical Prescription</h2>
+        </div>
+
+        <div class="info">
+            <span class="label">Doctor:</span> Dr. {{ appointment.name }}
+        </div>
+
+        <div class="info">
+            <span class="label">Date:</span> {{ appointment.date }}
+        </div>
+
+        <div class="prescription-box">
+            {{ appointment.prescription }}
+        </div>
+
+        <div class="footer">
+            Doctor Signature ____________________
+        </div>
+
+        <a href="/patient_appointments" class="btn-back">⬅ Back to Appointments</a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Appointments</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .appointment-card {
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .appointment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+        }
+
+        .doctor-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .info {
+            margin: 8px 0;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .Pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .Accepted {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .Rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-prescription {
+            background-color: #4e73df;
+            color: white;
+        }
+
+        .btn-prescription:hover {
+            background-color: #2e59d9;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .no-data {
+            text-align: center;
+            font-size: 18px;
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>🗓 My Appointments</h2>
+
+    {% for appt in appointments %}
+        <div class="appointment-card">
+            <div class="doctor-name">👨‍⚕️ Dr. {{ appt.name }}</div>
+
+            <div class="info">📅 Date: {{ appt.date }}</div>
+
+            <div class="info">
+                Status:
+                <span class="status {{ appt.status }}">
+                    {{ appt.status }}
+                </span>
+            </div>
+
+            {% if appt.prescription %}
+                <a href="/view_prescription/{{ appt.id }}" class="btn btn-prescription">
+                    View Prescription
+                </a>
+            {% else %}
+                <div class="info" style="color: gray;">
+                    No Prescription Yet
+                </div>
+            {% endif %}
+        </div>
+
+    {% else %}
+        <div class="no-data">
+            No appointments found.
+        </div>
+    {% endfor %}
+
+    <a href="/patient_dashboard" class="back-link">⬅ Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

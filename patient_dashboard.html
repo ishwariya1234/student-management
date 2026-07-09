@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Dashboard</title>
+    <style>
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            color: white;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+        .logout-btn {
+            background: #e74a3b;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: white;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Section Title */
+        .section-title {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 22px;
+        }
+
+        /* Doctor Cards Layout */
+        .doctor-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 30px;
+        }
+
+        /* Card Design */
+        .doctor-card {
+            background: white;
+            color: black;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            transition: transform 0.3s ease;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .card-header {
+            background: linear-gradient(45deg, #36d1dc, #5b86e5);
+            padding: 15px;
+            text-align: center;
+            color: white;
+        }
+
+        .card-body {
+            padding: 15px;
+            line-height: 1.6;
+        }
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: rgba(0,0,0,0.25);
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.nav-links a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ffd700;
+}
+
+        .card-footer {
+            padding: 15px;
+            text-align: center;
+        }
+
+        /* Date Input */
+        input[type="date"] {
+            padding: 6px;
+            margin-bottom: 10px;
+            width: 90%;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        /* Button */
+        button {
+            background: linear-gradient(45deg, #ff512f, #dd2476);
+            border: none;
+            padding: 8px 15px;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        /* Appointment Section */
+        .appointment-section {
+            background: rgba(255,255,255,0.15);
+            margin: 30px;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .appointment-item {
+            background: white;
+            color: black;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+.success-message {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+}
+
+        .status {
+            font-weight: bold;
+        }
+
+        .Pending { color: orange; }
+        .Accepted { color: green; }
+        .Rejected { color: red; }
+
+    </style>
+</head>
+<body>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="success-message">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<!-- Navbar -->
+<div class="navbar">
+    <div class="logo">🏥 HospitalMS</div>
+    <div class="nav-links">
+        <a href="/patient_dashboard">Home</a>
+        <a href="/patient_appointments">Appointment Status</a>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+</div>
+<h3 class="section-title">Available Doctors</h3>
+
+<div class="doctor-container">
+{% for doctor in doctors %}
+    <div class="doctor-card">
+        <div class="card-header">
+            <h3>👨‍⚕️ Dr. {{ doctor.name }}</h3>
+        </div>
+
+        <div class="card-body">
+            <p><strong>Specialization:</strong> {{ doctor.specialization }}</p>
+            <p><strong>Cabin No:</strong> {{ doctor.cabin }}</p>
+            <p><strong>Email:</strong> {{ doctor.email }}</p>
+        </div>
+
+        <div class="card-footer">
+            <form method="POST" action="/book/{{ doctor.id }}">
+                <input type="date" name="date" required min="{{ date_today }}">
+                <br>
+                <button type="submit">Book Appointment</button>
+            </form>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+<!-- Appointment Status Section -->
+<div class="appointment-section">
+    <h3>Your Appointments</h3>
+
+    {% if appointments %}
+        {% for appt in appointments %}
+            <div class="appointment-item">
+                Doctor: {{ appt.name }} |
+                Date: {{ appt.date }} |
+                Status: 
+                <span class="status {{ appt.status }}">
+                    {{ appt.status }}
+                </span>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No appointments booked yet.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
